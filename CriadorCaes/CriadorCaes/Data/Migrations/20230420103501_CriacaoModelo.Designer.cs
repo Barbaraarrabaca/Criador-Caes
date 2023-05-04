@@ -4,6 +4,7 @@ using CriadorCaes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,149 +12,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CriadorCaes.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230420103501_CriacaoModelo")]
+    partial class CriacaoModelo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CriadorCaes.Models.Animais", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CriadorFK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataCompra")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumLOP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RacaFK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Sexo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CriadorFK");
-
-                    b.HasIndex("RacaFK");
-
-                    b.ToTable("Animais");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Criadores", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CodPostal")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Morada")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NomeComercial")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Telemovel")
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Criadores");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Fotografias", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnimalFK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataFotografia")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Local")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeFicheiro")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnimalFK");
-
-                    b.ToTable("Fotografias");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Racas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Racas");
-                });
-
-            modelBuilder.Entity("CriadoresRacas", b =>
-                {
-                    b.Property<int>("ListaCriadoresId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListaRacasId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ListaCriadoresId", "ListaRacasId");
-
-                    b.HasIndex("ListaRacasId");
-
-                    b.ToTable("CriadoresRacas");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -357,51 +227,6 @@ namespace CriadorCaes.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CriadorCaes.Models.Animais", b =>
-                {
-                    b.HasOne("CriadorCaes.Models.Criadores", "Criador")
-                        .WithMany("ListaAnimais")
-                        .HasForeignKey("CriadorFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CriadorCaes.Models.Racas", "Raca")
-                        .WithMany("ListaAnimais")
-                        .HasForeignKey("RacaFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Criador");
-
-                    b.Navigation("Raca");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Fotografias", b =>
-                {
-                    b.HasOne("CriadorCaes.Models.Animais", "Animal")
-                        .WithMany("ListaFotografias")
-                        .HasForeignKey("AnimalFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Animal");
-                });
-
-            modelBuilder.Entity("CriadoresRacas", b =>
-                {
-                    b.HasOne("CriadorCaes.Models.Criadores", null)
-                        .WithMany()
-                        .HasForeignKey("ListaCriadoresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CriadorCaes.Models.Racas", null)
-                        .WithMany()
-                        .HasForeignKey("ListaRacasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -451,21 +276,6 @@ namespace CriadorCaes.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Animais", b =>
-                {
-                    b.Navigation("ListaFotografias");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Criadores", b =>
-                {
-                    b.Navigation("ListaAnimais");
-                });
-
-            modelBuilder.Entity("CriadorCaes.Models.Racas", b =>
-                {
-                    b.Navigation("ListaAnimais");
                 });
 #pragma warning restore 612, 618
         }

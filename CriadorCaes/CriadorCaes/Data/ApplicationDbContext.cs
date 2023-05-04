@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using CriadorCaes.Models;
 
 namespace CriadorCaes.Data
 {
@@ -9,5 +10,6 @@ namespace CriadorCaes.Data
             : base(options)
         {
         }
+        public DbSet<CriadorCaes.Models.Criadores> Criadores { get; set; }
     }
 }
